@@ -3,11 +3,11 @@ import * as YAML from 'yamljs';
 import * as express from 'express';
 
 /**
-* Add Swagger Middleware and setup the UI route for swagger
+ * Add Swagger Middleware and setup the UI route for swagger
  * @param app Express App
  */
-export function swaggerify (exApp: express.Application, middleware) {
-     // Add all the Swagger Express Middleware, or just the ones you need.
+export function swaggerify(exApp: express.Application, middleware) {
+  // Add all the Swagger Express Middleware, or just the ones you need.
   // NOTE: Some of these accept optional options (omitted here for brevity)
 
   exApp.enable('case sensitive routing');
@@ -25,28 +25,23 @@ export function swaggerify (exApp: express.Application, middleware) {
     middleware.parseRequest({
       // Configure the cookie parser to use secure cookies
       cookie: {
-        secret: process.env.SESSION_SECRET
+        secret: process.env.SESSION_SECRET,
       },
       // Don't allow JSON content over 100kb (default is 1mb)
       json: {
-        limit: process.env.REQUEST_LIMIT
-      }
+        limit: process.env.REQUEST_LIMIT,
+      },
     })
   );
 
   // CORS enabled for production builds
-  if (
-    process.env.NODE_ENV === 'production' &&
-    process.env.CORS === 'true'
-  ) {
+  if (process.env.NODE_ENV === 'production' && process.env.CORS === 'true') {
     exApp.use(middleware.metadata());
-    exApp.use(middleware.CORS());    
+    exApp.use(middleware.CORS());
   }
 
   exApp.use(middleware.validateRequest());
-    
-  
 
   const swaggerDocument = YAML.load('./server/common/swagger/Api.yaml');
   exApp.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-};
+}

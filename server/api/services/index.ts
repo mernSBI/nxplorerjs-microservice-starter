@@ -4,5 +4,6 @@ export { default as StarwarsService } from './starwars.service';
 export { default as UserService } from './user.service';
 export { default as HystrixDemoService } from './hystrix-demo.service';
 export { default as ScraperService } from './scraper.service';
+export { default as AuthService } from './auth.service';
 export * from './response-builder';
 export * from './http-status-codes';

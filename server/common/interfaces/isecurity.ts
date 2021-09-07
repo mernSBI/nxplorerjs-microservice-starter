@@ -1,6 +1,6 @@
 export enum JWT_KeyType {
   Private = 'PRIVATE',
-  Public = 'PUBLIC'
+  Public = 'PUBLIC',
 }
 
 /**

@@ -9,11 +9,11 @@ import * as http from 'http';
 import * as ProgressBar from 'progress';
 import * as express from 'express';
 import * as path from 'path';
-import { swaggerify } from './common/config/';
+// import { swaggerify } from './common/config/';
 
 // Single Node execution
 // tslint:disable:no-console
-const welcome = port =>
+const welcome = (port) =>
   console.log(
     `up and running in ${process.env.NODE_ENV ||
       'development'} @: ${os.hostname()} on port: ${port}`
@@ -22,40 +22,40 @@ const welcome = port =>
 const setupServer = () => {
   // create server
   const bar = new ProgressBar('Server Startup [:bar] :percent :elapseds', {
-    total: 6
+    total: 6,
   });
   bar.tick();
   const exApp = express();
   const swaggerFile = path.join(__dirname, './common/swagger/Api.yaml');
   createSwaggerMiddleware(swaggerFile, exApp, (err, middleware) => {
-      swaggerify(exApp, middleware)
-      const app = new Server(exApp).getServer().build();
-      bar.tick();
-      const apolloServer: ApolloServer = configGraphQL(app);
-      bar.tick();
-      // Create Server so that it can be reused for the
-      // configuring the SubscriptionServer
-      const ws = http.createServer(app);
-      bar.tick();
-      if (process.env.GRAPHQL_SUBSCRIPTIONS === 'true') {
-        apolloServer.installSubscriptionHandlers(ws);
+    // swaggerify(exApp, middleware);
+    const app = new Server(exApp).getServer().build();
+    bar.tick();
+    const apolloServer: ApolloServer = configGraphQL(app);
+    bar.tick();
+    // Create Server so that it can be reused for the
+    // configuring the SubscriptionServer
+    const ws = http.createServer(app);
+    bar.tick();
+    if (process.env.GRAPHQL_SUBSCRIPTIONS === 'true') {
+      apolloServer.installSubscriptionHandlers(ws);
+    }
+    bar.tick();
+    // console.log(apolloServer.subscriptionsPath);
+    ws.listen(process.env.PORT, (err?: Error) => {
+      if (err) {
+        throw err;
+      }
+
+      if (process.env.STREAM_HYSTRIX === 'true') {
+        // configure Hystrix Support
+        configHystrix();
       }
       bar.tick();
-      // console.log(apolloServer.subscriptionsPath);
-      ws.listen(process.env.PORT, (err?: Error) => {
-        if (err) {
-          throw err;
-        }
-
-        if (process.env.STREAM_HYSTRIX === 'true') {
-          // configure Hystrix Support
-          configHystrix();
-        }
-        bar.tick();
-        welcome(process.env.PORT);
-      });
-    }
-)}
+      welcome(process.env.PORT);
+    });
+  });
+};
 
 const setupCluster = () => {
   const numWorkers = require('os').cpus().length;
@@ -66,7 +66,7 @@ const setupCluster = () => {
     cluster.fork();
   }
 
-  cluster.on('online', worker => {
+  cluster.on('online', (worker) => {
     console.log('Worker ' + worker.process.pid + ' is online');
   });
 

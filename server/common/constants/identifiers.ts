@@ -8,7 +8,8 @@ const SERVICE_IDENTIFIER = {
   PRODUCT: Symbol.for('Product'),
   USER: Symbol.for('User'),
   SCRAPER: Symbol.for('Scraper'),
-  LOGGER_MIDDLEWARE: Symbol.for('LoggerMiddleware')
+  LOGGER_MIDDLEWARE: Symbol.for('LoggerMiddleware'),
+  AUTH: Symbol.for('Auth'),
 };
 
 export default SERVICE_IDENTIFIER;

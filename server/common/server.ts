@@ -1,12 +1,14 @@
 import * as express from 'express';
 import * as partialResponse from 'express-partial-response';
 import * as path from 'path';
+import * as mongoose from 'mongoose';
 import {
   secureApp,
   configLogging,
   configMetrics,
   configHealthChecks,
-  addCompression
+  addCompression,
+  database,
 } from './config';
 import { IOCContainer } from './config/ioc_config';
 import { InversifyExpressServer } from 'inversify-express-utils';
@@ -28,13 +30,18 @@ export default class ExpressServer {
         ? path.normalize(__dirname + '/../..')
         : path.normalize('.');
     const container = IOCContainer.getInstance().getContainer();
-    this.server = new InversifyExpressServer(container, undefined, {
-      rootPath: '/api/v1'
-    },exApp);
-    this.server.setConfig(app => {
+    this.server = new InversifyExpressServer(
+      container,
+      undefined,
+      {
+        rootPath: '/api/v1',
+      },
+      exApp
+    );
+    this.server.setConfig((app) => {
       // Add security configuration
       secureApp(app);
-
+      database(mongoose);
       app.use((req, res, next) => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
@@ -66,7 +73,6 @@ export default class ExpressServer {
 
       // Add Compression support
       addCompression(app);
-
     });
   }
 

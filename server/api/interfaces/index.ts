@@ -5,3 +5,4 @@ export { default as IStarwars } from './istarwars';
 export { default as IUser } from './iuser';
 export { default as IScraper } from './iscraper';
 export { default as ScrapeData } from './scrape-data';
+export { default as IAuth } from './iauth';

@@ -8,7 +8,8 @@ import {
   IProduct,
   IStarwars,
   IUser,
-  IScraper
+  IScraper,
+  IAuth,
 } from '../../api/interfaces';
 import { ILogger, IMetrics, ISecurity } from '../interfaces';
 import {
@@ -17,15 +18,12 @@ import {
   HystrixDemoService,
   StarwarsService,
   UserService,
-  ScraperService
+  ScraperService,
+  AuthService,
 } from '../../api/services';
 import LoggerMiddleware from '../middleware/logger-middleware';
-import '../../api/controllers/hystrix-demo/controller';
-import '../../api/controllers/examples/controller';
-import '../../api/controllers/shop/controller';
-import '../../api/controllers/starwars/controller';
-import '../../api/controllers/security/controller';
-import '../../api/controllers/scraper/controller';
+
+import '../../api/controllers/auth/controller';
 import SERVICE_IDENTIFIER from '../constants/identifiers';
 
 /**
@@ -66,6 +64,7 @@ export class IOCContainer {
         .bind<LoggerMiddleware>(SERVICE_IDENTIFIER.LOGGER_MIDDLEWARE)
         .to(LoggerMiddleware);
       IOCContainer.instance.container = container;
+      container.bind<IAuth>(SERVICE_IDENTIFIER.AUTH).to(AuthService);
     }
     return IOCContainer.instance;
   }

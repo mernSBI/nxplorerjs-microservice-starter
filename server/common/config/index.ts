@@ -6,3 +6,4 @@ export { configGraphQL } from './graphql';
 export { configHystrix } from './hystrix';
 export { configHealthChecks } from './healthchecks';
 export { addCompression } from './compression';
+export { database } from './database';

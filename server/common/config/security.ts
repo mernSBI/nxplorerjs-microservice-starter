@@ -15,7 +15,7 @@ export const secureApp = (app: express.Application) => {
     bodyParser.urlencoded({
       limit: '50mb',
       extended: true,
-      parameterLimit: 50000
+      parameterLimit: 50000,
     })
   );
   app.use(helmet());
